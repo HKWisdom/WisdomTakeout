@@ -1,25 +1,84 @@
 package com.wisdom.takeout.ui.fragment;
 
-import android.graphics.Color;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.animation.ArgbEvaluator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.wisdom.takeout.R;
+import com.wisdom.takeout.ui.adapter.HomeAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
 
 /**
  * Created by HKWisdom on 2017/3/19.
  */
-public class HomeFragment extends android.support.v4.app.Fragment {
-    @Nullable
+public class HomeFragment extends BaseFragment {
+
+    @BindView(R.id.rv_home)
+    RecyclerView mRvHome;
+    @BindView(R.id.home_tv_address)
+    TextView mHomeTvAddress;
+    @BindView(R.id.ll_title_search)
+    LinearLayout mLlTitleSearch;
+    @BindView(R.id.ll_title_container)
+    LinearLayout mLlTitleContainer;
+    private HomeAdapter mAdapter;
+    private List<String> mList;
+    private int sumY = 0;
+    private float distance = 200f;
+    ArgbEvaluator mArgbEvaluator = new ArgbEvaluator();
+    int startColor = 0x553190E8;
+    int endColor = 0xff3190E8;
+    int bgColor;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        TextView tv = new TextView(getActivity());
-        tv.setGravity(Gravity.CENTER);
-        tv.setTextColor(Color.BLUE);
-        tv.setText(this.getClass().getSimpleName());
-        return tv;
+    protected View initView() {
+        View view = View.inflate(mContext, R.layout.fragment_home, null);
+        mList = new ArrayList<>();
+        mAdapter = new HomeAdapter(mContext);
+        return view;
     }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        for (int i = 0; i < 50; i++) {
+            mList.add("item" + i);
+        }
+        mAdapter.setData(mList);
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        mRvHome.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        mRvHome.setAdapter(mAdapter);
+        mRvHome.setOnScrollListener(mOnScrollListener);
+    }
+
+    /**
+     * RecyclerView的滚动监听
+     */
+    private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            //当前滚动的距离
+            sumY += dy;
+            if (sumY <= 0) {
+                bgColor = startColor;
+            } else if (sumY > distance) {
+                bgColor = endColor;
+            } else {
+                bgColor = (int) mArgbEvaluator.evaluate(sumY / distance, startColor, endColor);
+            }
+            mLlTitleContainer.setBackgroundColor(bgColor);
+        }
+    };
 }
