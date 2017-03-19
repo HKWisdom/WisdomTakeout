@@ -29,7 +29,8 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.ll_title_container)
     LinearLayout mLlTitleContainer;
     private HomeAdapter mAdapter;
-    private List<String> mList;
+    private List<String> mNearByData;
+    private List<String> mOtherData;
     private int sumY = 0;
     private float distance = 200f;
     ArgbEvaluator mArgbEvaluator = new ArgbEvaluator();
@@ -40,7 +41,8 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected View initView() {
         View view = View.inflate(mContext, R.layout.fragment_home, null);
-        mList = new ArrayList<>();
+        mNearByData = new ArrayList<>();
+        mOtherData = new ArrayList<>();
         mAdapter = new HomeAdapter(mContext);
         return view;
     }
@@ -48,10 +50,13 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected void initData() {
         super.initData();
-        for (int i = 0; i < 50; i++) {
-            mList.add("item" + i);
+        for (int i = 0; i < 10; i++) {
+            mNearByData.add("我是附近商家" + i);
         }
-        mAdapter.setData(mList);
+        for (int i = 0; i < 24; i++) {
+            mOtherData.add("我是其他商家" + i);
+        }
+        mAdapter.setData(mNearByData,mOtherData);
     }
 
     @Override

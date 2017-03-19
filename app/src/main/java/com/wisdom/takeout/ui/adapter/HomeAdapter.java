@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.wisdom.takeout.R;
 
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -18,44 +20,177 @@ import butterknife.ButterKnife;
  */
 public class HomeAdapter extends RecyclerView.Adapter {
 
-    public List<String> mData;
+    public List<String> mNearByList;
+    public List<String> mOtherList;
     public Context mContext;
+    public static final int TYPE_TITLE = 0;
+    public static final int TYPE_DIVISION = 1;
+    public static final int TYPE_SELLER = 2;
+    private int GROUP_SIZE = 10;
 
     public HomeAdapter(Context context) {
         mContext = context;
     }
 
-    public void setData(List<String> data) {
-        mData = data;
+    public void setData(List<String> nearByList, List<String> otherList) {
+        mNearByList = nearByList;
+        mOtherList = otherList;
         notifyDataSetChanged();
+    }
+
+
+    @Override
+    public int getItemViewType(int position) {
+        // 头布局  （附近0 - 附近9）  分割线 （其他0-其他9） 分割线 （其他10-其他19） 分割线 （其他20-其他24）
+        if (position == 0) {//头布局
+            return TYPE_TITLE;
+        }
+        //        else if (position == (mNearByList.size() + 1)) {
+        //            return TYPE_DIVISION;
+        //        }
+
+        else if (position > mNearByList.size() && (position - 1 - mNearByList.size()) % (GROUP_SIZE + 1) == 0) {
+            return TYPE_DIVISION;
+        } else {
+            return TYPE_SELLER;
+        }
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(mContext, R.layout.item_home_common, null);
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        View itemView = null;
+        //        View itemView = View.inflate(mContext, R.layout.item_home_common, null);
+        switch (viewType) {
+            case TYPE_TITLE:
+                itemView = View.inflate(mContext, R.layout.item_title, null);
+                ItemTitleViewHolder viewHolder = new ItemTitleViewHolder(itemView);
+                return viewHolder;
+
+            case TYPE_DIVISION:
+                itemView = View.inflate(mContext, R.layout.item_division, null);
+                DivisionViewHolder itemTitleViewHolder = new DivisionViewHolder(itemView);
+                return itemTitleViewHolder;
+
+            case TYPE_SELLER:
+                itemView = View.inflate(mContext, R.layout.item_home_common, null);
+                SellerViewHolder itemTitleViewHolder1 = new SellerViewHolder(itemView);
+                return itemTitleViewHolder1;
+            default:
+                return null;
+        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ViewHolder viewHolder = (ViewHolder) holder;
-        viewHolder.bindView(mData.get(position));
+        int itemViewType = getItemViewType(position);
+        switch (itemViewType) {
+            case TYPE_TITLE:
+                ItemTitleViewHolder viewHolder = (ItemTitleViewHolder) holder;
+                viewHolder.bindView("title" + position);
+                break;
+
+            case TYPE_DIVISION:
+                DivisionViewHolder divisionViewHolder = (DivisionViewHolder) holder;
+                divisionViewHolder.bindView("----------分割线-----------");
+                break;
+
+            case TYPE_SELLER:
+                SellerViewHolder sellerViewHolder = (SellerViewHolder) holder;
+                //根据position区分商家
+                int index;
+                if (position < mNearByList.size() + 1) {
+                    //都数据附近商家
+                    index = position - 1;
+                    sellerViewHolder.bindView(mNearByList.get(index));
+                } else {
+                    index = position - 1 - mNearByList.size() - 1;//去除头部  附近商家  第一个分割线
+                    index -= index / (GROUP_SIZE + 1);
+                    sellerViewHolder.bindView(mOtherList.get(index));
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
     public int getItemCount() {
-        if (mData != null) {
-            return mData.size();
+        // 头布局  （附近0 - 附近9）  分割线 （其他0-其他9） 分割线 （其他10-其他19） 分割线 （其他20-其他24）
+
+        int count = 0;
+        if (mNearByList.size() == 0 && mOtherList.size() == 0) {
+            return 0;
         }
-        return 0;
+
+        if (mNearByList.size() > 0) {
+            count += 1;
+            count += mNearByList.size();
+            count += 1;
+        } else {
+            //只有头布局
+            count += 1;
+        }
+
+        if (mOtherList.size() > 0) {
+            count += mOtherList.size();
+            //计算分割线
+            count += mOtherList.size() / GROUP_SIZE;
+            if (mOtherList.size() % GROUP_SIZE == 0) {
+                count -= 1;
+            }
+        }
+        return count;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    class ItemTitleViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.slider)
+        com.daimajia.slider.library.SliderLayout mSlider;
+
+        public ItemTitleViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+
+        public void bindView(String s) {
+            testData(mContext);
+        }
+
+        private void testData(Context context) {
+            HashMap<String, String> url_maps = new HashMap<String, String>();
+            url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
+            url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");
+            url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
+            url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");
+
+            for (String desc : url_maps.keySet()) {
+                TextSliderView textSliderView = new TextSliderView(itemView.getContext());
+                textSliderView
+                        .description(desc)
+                        .image(url_maps.get(desc));
+                mSlider.addSlider(textSliderView);
+            }
+        }
+    }
+
+    class DivisionViewHolder extends RecyclerView.ViewHolder {
+
+        public DivisionViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+
+        public void bindView(String s) {
+
+        }
+    }
+
+    class SellerViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv)
         TextView mTv;
 
-        public ViewHolder(View itemView) {
+        public SellerViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
