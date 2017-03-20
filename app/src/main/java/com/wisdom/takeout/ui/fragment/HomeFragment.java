@@ -8,10 +8,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wisdom.takeout.R;
+import com.wisdom.takeout.presenter.HomePresenter;
 import com.wisdom.takeout.ui.adapter.HomeAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 
@@ -21,28 +19,26 @@ import butterknife.BindView;
 public class HomeFragment extends BaseFragment {
 
     @BindView(R.id.rv_home)
-    RecyclerView mRvHome;
+    public RecyclerView mRvHome;
     @BindView(R.id.home_tv_address)
     TextView mHomeTvAddress;
     @BindView(R.id.ll_title_search)
     LinearLayout mLlTitleSearch;
     @BindView(R.id.ll_title_container)
     LinearLayout mLlTitleContainer;
-    private HomeAdapter mAdapter;
-    private List<String> mNearByData;
-    private List<String> mOtherData;
+    public HomeAdapter mAdapter;
     private int sumY = 0;
     private float distance = 200f;
     ArgbEvaluator mArgbEvaluator = new ArgbEvaluator();
     int startColor = 0x553190E8;
     int endColor = 0xff3190E8;
     int bgColor;
+    private HomePresenter mHomePresenter;
 
     @Override
     protected View initView() {
         View view = View.inflate(mContext, R.layout.fragment_home, null);
-        mNearByData = new ArrayList<>();
-        mOtherData = new ArrayList<>();
+        mHomePresenter = new HomePresenter(this);
         mAdapter = new HomeAdapter(mContext);
         return view;
     }
@@ -50,13 +46,8 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected void initData() {
         super.initData();
-        for (int i = 0; i < 10; i++) {
-            mNearByData.add("我是附近商家" + i);
-        }
-        for (int i = 0; i < 24; i++) {
-            mOtherData.add("我是其他商家" + i);
-        }
-        mAdapter.setData(mNearByData,mOtherData);
+       mHomePresenter.loadData();
+
     }
 
     @Override

@@ -4,10 +4,14 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.squareup.picasso.Picasso;
 import com.wisdom.takeout.R;
+import com.wisdom.takeout.module.bean.Seller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,8 +24,8 @@ import butterknife.ButterKnife;
  */
 public class HomeAdapter extends RecyclerView.Adapter {
 
-    public List<String> mNearByList;
-    public List<String> mOtherList;
+    public List<Seller> mNearByList;
+    public List<Seller> mOtherList;
     public Context mContext;
     public static final int TYPE_TITLE = 0;
     public static final int TYPE_DIVISION = 1;
@@ -32,7 +36,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
         mContext = context;
     }
 
-    public void setData(List<String> nearByList, List<String> otherList) {
+    public void setData(List<Seller> nearByList, List<Seller> otherList) {
         mNearByList = nearByList;
         mOtherList = otherList;
         notifyDataSetChanged();
@@ -72,7 +76,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
                 return itemTitleViewHolder;
 
             case TYPE_SELLER:
-                itemView = View.inflate(mContext, R.layout.item_home_common, null);
+                itemView = View.inflate(mContext, R.layout.item_seller, null);
                 SellerViewHolder itemTitleViewHolder1 = new SellerViewHolder(itemView);
                 return itemTitleViewHolder1;
             default:
@@ -118,7 +122,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
         // 头布局  （附近0 - 附近9）  分割线 （其他0-其他9） 分割线 （其他10-其他19） 分割线 （其他20-其他24）
 
         int count = 0;
-        if (mNearByList.size() == 0 && mOtherList.size() == 0) {
+        if (mNearByList == null && mOtherList == null) {
             return 0;
         }
 
@@ -165,9 +169,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
 
             for (String desc : url_maps.keySet()) {
                 TextSliderView textSliderView = new TextSliderView(itemView.getContext());
-                textSliderView
-                        .description(desc)
-                        .image(url_maps.get(desc));
+                textSliderView.description(desc).image(url_maps.get(desc));
                 mSlider.addSlider(textSliderView);
             }
         }
@@ -187,8 +189,20 @@ public class HomeAdapter extends RecyclerView.Adapter {
     }
 
     class SellerViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tv)
-        TextView mTv;
+        @BindView(R.id.seller_logo)
+        ImageView mSellerLogo;
+        @BindView(R.id.tvCount)
+        TextView mTvCount;
+        @BindView(R.id.tv_title)
+        TextView mTvTitle;
+        @BindView(R.id.ratingBar)
+        RatingBar mRatingBar;
+        @BindView(R.id.tv_home_sale)
+        TextView mTvHomeSale;
+        @BindView(R.id.tv_home_send_price)
+        TextView mTvHomeSendPrice;
+        @BindView(R.id.tv_home_distance)
+        TextView mTvHomeDistance;
 
         public SellerViewHolder(View itemView) {
             super(itemView);
@@ -196,8 +210,16 @@ public class HomeAdapter extends RecyclerView.Adapter {
         }
 
 
-        public void bindView(String s) {
-            mTv.setText(s);
+        public void bindView(Seller sellerBean) {
+
+            String iconUrl = sellerBean.getIcon();
+            Picasso.with(mContext).load(iconUrl).into(mSellerLogo);
+            mTvTitle.setText(sellerBean.getName());
+            mRatingBar.setRating(Float.parseFloat(sellerBean.getScore()));
+            mTvHomeDistance.setText(sellerBean.getDistance());
+            mTvHomeSale.setText(sellerBean.getSale());
+            mTvHomeSendPrice.setText(sellerBean.getSendPrice());
+            mTvCount.setText(sellerBean.getScore());
         }
     }
 }
