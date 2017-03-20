@@ -14,5 +14,6 @@ public class TakeoutApp extends Application {
     public void onCreate() {
         super.onCreate();
         sInstance = this;
+
     }
 }

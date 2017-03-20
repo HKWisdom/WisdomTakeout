@@ -1,13 +1,13 @@
 package com.wisdom.takeout.ui.fragment;
 
-import android.text.TextUtils;
+import android.content.Intent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.wisdom.takeout.R;
+import com.wisdom.takeout.ui.activity.LoginActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -17,55 +17,36 @@ import butterknife.OnClick;
  */
 public class UserFragment extends BaseFragment {
 
-    @BindView(R.id.iv_user_back)
-    ImageView mIvUserBack;
-    @BindView(R.id.iv_user_password_login)
-    TextView mIvUserPasswordLogin;
-    @BindView(R.id.et_user_phone)
-    EditText mEtUserPhone;
-    @BindView(R.id.tv_user_code)
-    TextView mTvUserCode;
-    @BindView(R.id.et_user_code)
-    EditText mEtUserCode;
+
+    @BindView(R.id.tv_user_setting)
+    ImageView mTvUserSetting;
+    @BindView(R.id.iv_user_notice)
+    ImageView mIvUserNotice;
     @BindView(R.id.login)
-    TextView mLogin;
+    ImageView mLogin;
+    @BindView(R.id.username)
+    TextView mUsername;
+    @BindView(R.id.phone)
+    TextView mPhone;
+    @BindView(R.id.ll_userinfo)
+    LinearLayout mLlUserinfo;
+    @BindView(R.id.iv_address_manager)
+    ImageView mIvAddressManager;
 
     @Override
     protected View initView() {
-        View inflate = View.inflate(mContext, R.layout.activity_login, null);
+        View inflate = View.inflate(mContext, R.layout.fragment_user, null);
         return inflate;
     }
 
     @Override
     protected void initData() {
         super.initData();
+
     }
-
-
-    @OnClick({R.id.tv_user_code, R.id.login})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.tv_user_code:
-                String userCode = mEtUserCode.getText().toString().trim();
-                if (TextUtils.isEmpty(userCode)) {
-                    Toast.makeText(mContext, "内容为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }else {
-                    //TODO:获取验证码
-                }
-
-                break;
-
-            case R.id.login:
-                String loginCode = mEtUserCode.getText().toString().trim();
-                if (TextUtils.isEmpty(loginCode)) {
-                    Toast.makeText(mContext, "内容为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }else {
-                    //TODO:登录
-                }
-                break;
-        }
+    @OnClick(R.id.login)
+    public void onClick() {
+        Intent intent = new Intent(mContext,LoginActivity.class);
+        startActivity(intent);
     }
-
 }
