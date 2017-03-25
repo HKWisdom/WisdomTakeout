@@ -23,6 +23,11 @@ public abstract class BaseFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mContext = getActivity();
+        init();
+    }
+
+    protected void init() {
+
     }
 
     @Nullable

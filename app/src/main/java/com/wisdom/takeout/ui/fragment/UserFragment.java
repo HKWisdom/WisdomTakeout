@@ -36,6 +36,8 @@ public class UserFragment extends BaseFragment {
     @BindView(R.id.iv_address_manager)
     ImageView mIvAddressManager;
 
+    private static final String TAG = "UserFragment";
+
     @Override
     protected View initView() {
         View inflate = View.inflate(mContext, R.layout.fragment_user, null);
@@ -62,7 +64,24 @@ public class UserFragment extends BaseFragment {
             mUsername.setText("欢迎您," + TakeoutApp.sUser.getName());
             mPhone.setText(TakeoutApp.sUser.getPhone());
         }
+        /*try {
+            TakeOutHelper takeOutHelper = new TakeOutHelper(mContext);
+            Dao<User, Integer> userDao = takeOutHelper.getDao(User.class);
+            User user = userDao.queryBuilder().queryForFirst();
+            if (user.getId() == -1) {
+                //用户未登录
+                mLogin.setVisibility(View.VISIBLE);
+                mLlUserinfo.setVisibility(View.INVISIBLE);
+            }else {
+                mLogin.setVisibility(View.GONE);
+                mLlUserinfo.setVisibility(View.VISIBLE);
+                mUsername.setText("欢迎您," + TakeoutApp.sUser.getName());
+                mPhone.setText(TakeoutApp.sUser.getPhone());
+            }
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }*/
     }
 
     @OnClick(R.id.login)
