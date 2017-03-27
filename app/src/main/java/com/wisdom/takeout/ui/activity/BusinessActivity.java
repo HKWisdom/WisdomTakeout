@@ -1,9 +1,11 @@
 package com.wisdom.takeout.ui.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.wisdom.takeout.R;
 import com.wisdom.takeout.module.bean.GoodsInfo;
+import com.wisdom.takeout.module.bean.GoodsTypeInfo;
 import com.wisdom.takeout.module.bean.Seller;
 import com.wisdom.takeout.ui.adapter.BusinessPageAdapter;
 import com.wisdom.takeout.ui.adapter.CartRvAdapter;
@@ -111,6 +114,15 @@ public class BusinessActivity extends BaseActivity {
             mCartRvAdapter = new CartRvAdapter(this);
             mRvCart.setLayoutManager(new LinearLayoutManager(this));
             mRvCart.setAdapter(mCartRvAdapter);
+
+            TextView tvClear = (TextView) mBottomSheetView.findViewById(R.id.tvClear);
+            tvClear.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //弹出dialog
+                    showPromptDialog();
+                }
+            });
         }
 
 
@@ -122,12 +134,63 @@ public class BusinessActivity extends BaseActivity {
             //显示BottomSheetLayout里面的内容
             //得到购物车的商品
             List<GoodsInfo> shopCarList = ((GoodsInfoFragment) mFragmentList.get(0)).mPresenter.getShopCarList();
-                mCartRvAdapter.setGoodsInfoList(shopCarList);
-                if (shopCarList.size() > 0) {
-                    mBottomSheetLayout.showWithSheetView(mBottomSheetView);
-                }
+            mCartRvAdapter.setGoodsInfoList(shopCarList);
+            if (shopCarList.size() > 0) {
+                mBottomSheetLayout.showWithSheetView(mBottomSheetView);
+            }
         }
     }
+
+    private void showPromptDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("确定清空购物车么");
+        dialog.setPositiveButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setNegativeButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                clearShopClear();
+            }
+        });
+
+        dialog.show();
+    }
+
+    /**
+     * 清空购物车
+     */
+    private void clearShopClear() {
+        //1:清空购物车自己
+        GoodsInfoFragment goodsInfoFragment = (GoodsInfoFragment) mFragmentList.get(0);
+        goodsInfoFragment.mPresenter.clearShopCarList();
+        mCartRvAdapter.notifyDataSetChanged();
+        //购物车消失
+        showOrDissmissCart();
+
+        //2:清空底部
+        List<GoodsInfo> shopCarList = goodsInfoFragment.mPresenter.getShopCarList();
+        updateShopCarUi(shopCarList);
+
+        //3:清空左侧
+        processRedDot(goodsInfoFragment);
+
+        //4:清空右侧
+        goodsInfoFragment.mGoodsAdapter1.notifyDataSetChanged();
+    }
+
+    private void processRedDot(GoodsInfoFragment goodsInfoFragment) {
+        List<GoodsTypeInfo> typeInfoList = goodsInfoFragment.mPresenter.getTypeInfoList();
+        for (GoodsTypeInfo goodsTypeInfo : typeInfoList) {
+            goodsTypeInfo.setRedDotCount(0);
+        }
+        goodsInfoFragment.mAdapter.notifyDataSetChanged();
+    }
+
 
     private void processIntent() {
         Intent intent = getIntent();

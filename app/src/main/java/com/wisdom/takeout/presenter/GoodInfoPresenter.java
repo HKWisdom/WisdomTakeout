@@ -27,6 +27,10 @@ public class GoodInfoPresenter extends BasePresenter {
     private List<GoodsInfo> mGoodsInfosList;
     private List<GoodsTypeInfo> mTypeInfoList;
 
+    public List<GoodsTypeInfo> getTypeInfoList() {
+        return mTypeInfoList;
+    }
+
     public GoodInfoPresenter(GoodsInfoFragment goodsInfoFragment) {
         mGoodsInfoFragment = goodsInfoFragment;
     }
@@ -95,6 +99,14 @@ public class GoodInfoPresenter extends BasePresenter {
             }
         }
         return shopCarList;
+    }
+
+    public void clearShopCarList() {
+        List<GoodsInfo> shopCarList = new ArrayList<>();
+        for (int i = 0; i < mGoodsInfosList.size(); i++) {
+            GoodsInfo goodsInfo = mGoodsInfosList.get(i);
+            goodsInfo.setCount(0);
+        }
     }
 
     //根据typeId获取左侧列表对应的index
