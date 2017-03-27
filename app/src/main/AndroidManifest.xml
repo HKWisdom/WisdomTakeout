@@ -176,6 +176,11 @@
         <meta-data
             android:name="JPUSH_APPKEY"
             android:value="5a4497a676e94ac28b61bc00"/>
+
+        <!--商家详情的页面-->
+        <activity android:name=".ui.activity.BusinessActivity">
+
+        </activity>
     </application>
 
 </manifest>

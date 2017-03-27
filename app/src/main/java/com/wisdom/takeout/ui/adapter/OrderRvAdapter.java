@@ -12,7 +12,11 @@ import com.wisdom.takeout.R;
 import com.wisdom.takeout.module.bean.Order;
 import com.wisdom.takeout.utils.OrderObservable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,13 +25,34 @@ import butterknife.ButterKnife;
  * Created by HKWisdom on 2017/3/24.
  */
 
-public class OrderRvAdapter extends RecyclerView.Adapter {
+public class OrderRvAdapter extends RecyclerView.Adapter implements Observer {
 
-    private List<Order> mOrderList;
+    private List<Order> mOrderList = new ArrayList<>();
     private Context mContext;
+    private int mPosition = -1;
 
     public OrderRvAdapter(Context context) {
         mContext = context;
+        OrderObservable.getInstance().addObserver(this);
+    }
+
+    @Override
+    public void update(Observable o, Object data) {
+        HashMap<String,String> map = (HashMap<String, String>) data;
+        String orderId = map.get("orderId");
+        String type = map.get("type");
+        for (int i = 0; i < mOrderList.size(); i++) {
+            Order order = mOrderList.get(i);
+            if (order.id.equals(orderId)) {
+                order.type = type;
+                mPosition = i;
+                break;
+            }
+        }
+
+        if (mPosition != -1) {
+            notifyItemChanged(mPosition);
+        }
     }
 
     public void setOrderList(List<Order> orderList) {
@@ -56,6 +81,8 @@ public class OrderRvAdapter extends RecyclerView.Adapter {
         }
         return 0;
     }
+
+
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.iv_order_item_seller_logo)

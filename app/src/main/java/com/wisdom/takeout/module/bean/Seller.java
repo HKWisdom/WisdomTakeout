@@ -2,9 +2,10 @@ package com.wisdom.takeout.module.bean;
 
 import android.content.pm.ActivityInfo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Seller {
+public class Seller implements Serializable{
 	
 	/**
 	 * "id":1,

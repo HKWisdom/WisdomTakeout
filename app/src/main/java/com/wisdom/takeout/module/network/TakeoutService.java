@@ -11,12 +11,15 @@ import retrofit2.http.Query;
  */
 
 public interface TakeoutService {
-    @GET(Content.HOME_URL)
+    @GET(Constants.HOME_URL)
     Call<ResponseInfo> homeList();
 
-    @GET(Content.LOGIN_URL)
+    @GET(Constants.LOGIN_URL)
     Call<ResponseInfo> loginByPhone(@Query("phone") String phone);
 
-    @GET(Content.ORDER_URL)
+    @GET(Constants.ORDER_URL)
     Call<ResponseInfo> orderGoodInfo(@Query("user") int userId);
+
+    @GET(Constants.BUSINESS_URL)
+    Call<ResponseInfo> businessGoodInfo(@Query("sellerId") int sellerId);
 }

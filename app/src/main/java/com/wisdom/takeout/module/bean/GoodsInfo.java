@@ -1,120 +1,142 @@
 package com.wisdom.takeout.module.bean;
 
-public class GoodsInfo {
-    int id;//商品id
-    String name;//商品名称
-    String icon;//商品图片
-    String form;//组成
-    int monthSaleNum;//月销售量
-    boolean bargainPrice;//特价
-    boolean isNew;//是否是新产品
-    String newPrice;//新价
-    int oldPrice;//原价
-    int sellerId;
-	public GoodsInfo() {
-		super();
-	}
-	
-	public GoodsInfo(int sellerId,int id, String name, String icon, String form, int monthSaleNum, boolean bargainPrice,
-			boolean isNew, String newPrice, int oldPrice) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.icon = icon;
-		this.form = form;
-		this.monthSaleNum = monthSaleNum;
-		this.bargainPrice = bargainPrice;
-		this.isNew = isNew;
-		this.newPrice = newPrice;
-		this.oldPrice = oldPrice;
-		this.sellerId = sellerId;
-	}
-	
-	public int getSellerId() {
-		return sellerId;
-	}
+import java.io.Serializable;
 
-	public void setSellerId(int sellerId) {
-		this.sellerId = sellerId;
-	}
+/**
+ * Created by Apple on 2016/9/2.
+ */
+public class GoodsInfo implements Serializable{
+    private boolean bargainPrice;
+    private String form;
+    private String icon;
+    private int id;
+    private int monthSaleNum;
+    private String name;
+    private boolean isNew;
+    private float newPrice;
+    private int oldPrice;
 
-	public int getId() {
-		return id;
-	}
+    private int count;//商品选择的数量
+    private int typeId;//商品类型的id
+    private int sellerId;//商铺的id
+    private String typeName;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public String getTypeName() {
+        return typeName;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public int getTypeId() {
+        return typeId;
+    }
 
-	public String getIcon() {
-		return icon;
-	}
+    public void setTypeId(int typeId) {
+        this.typeId = typeId;
+    }
 
-	public void setIcon(String icon) {
-		this.icon = icon;
-	}
+    public int getSellerId() {
+        return sellerId;
+    }
 
-	public String getForm() {
-		return form;
-	}
+    public void setSellerId(int sellerId) {
+        this.sellerId = sellerId;
+    }
 
-	public void setForm(String form) {
-		this.form = form;
-	}
+    public int getCount() {
+        return count;
+    }
 
-	public int getMonthSaleNum() {
-		return monthSaleNum;
-	}
+    public void setCount(int count) {
+        this.count = count;
+    }
 
-	public void setMonthSaleNum(int monthSaleNum) {
-		this.monthSaleNum = monthSaleNum;
-	}
+    public GoodsInfo() {
+    }
 
-	public boolean isBargainPrice() {
-		return bargainPrice;
-	}
+    public GoodsInfo(boolean bargainPrice, String form, String icon, int id, int monthSaleNum, String name, boolean isNew, float newPrice, int oldPrice) {
+        this.bargainPrice = bargainPrice;
+        this.form = form;
+        this.icon = icon;
+        this.id = id;
+        this.monthSaleNum = monthSaleNum;
+        this.name = name;
+        this.isNew = isNew;
+        this.newPrice = newPrice;
+        this.oldPrice = oldPrice;
+    }
 
-	public void setBargainPrice(boolean bargainPrice) {
-		this.bargainPrice = bargainPrice;
-	}
+    public boolean isBargainPrice() {
+        return bargainPrice;
+    }
 
-	public boolean isNew() {
-		return isNew;
-	}
+    public void setBargainPrice(boolean bargainPrice) {
+        this.bargainPrice = bargainPrice;
+    }
 
-	public void setNew(boolean isNew) {
-		this.isNew = isNew;
-	}
+    public String getForm() {
+        return form;
+    }
 
-	public String getNewPrice() {
-		return newPrice;
-	}
+    public void setForm(String form) {
+        this.form = form;
+    }
 
-	public void setNewPrice(String newPrice) {
-		this.newPrice = newPrice;
-	}
+    public String getIcon() {
+        return icon;
+    }
 
-	public int getOldPrice() {
-		return oldPrice;
-	}
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
 
-	public void setOldPrice(int oldPrice) {
-		this.oldPrice = oldPrice;
-	}
+    public int getId() {
+        return id;
+    }
 
-	@Override
-	public String toString() {
-		return "GoodsInfo [id=" + id + ", name=" + name + ", icon=" + icon + ", form=" + form + ", monthSaleNum="
-				+ monthSaleNum + ", bargainPrice=" + bargainPrice + ", isNew=" + isNew + ", newPrice=" + newPrice
-				+ ", oldPrice=" + oldPrice + "]";
-	}
-    
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getMonthSaleNum() {
+        return monthSaleNum;
+    }
+
+    public void setMonthSaleNum(int monthSaleNum) {
+        this.monthSaleNum = monthSaleNum;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public void setNew(boolean aNew) {
+        isNew = aNew;
+    }
+
+    public float getNewPrice() {
+        return newPrice;
+    }
+
+    public void setNewPrice(float newPrice) {
+        this.newPrice = newPrice;
+    }
+
+    public int getOldPrice() {
+        return oldPrice;
+    }
+
+    public void setOldPrice(int oldPrice) {
+        this.oldPrice = oldPrice;
+    }
 }

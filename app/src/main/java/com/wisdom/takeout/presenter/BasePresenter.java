@@ -5,7 +5,7 @@ import android.widget.Toast;
 
 import com.wisdom.takeout.app.TakeoutApp;
 import com.wisdom.takeout.module.bean.ResponseInfo;
-import com.wisdom.takeout.module.network.Content;
+import com.wisdom.takeout.module.network.Constants;
 import com.wisdom.takeout.module.network.TakeoutService;
 
 import retrofit2.Call;
@@ -25,7 +25,7 @@ public abstract class BasePresenter {
 
     public BasePresenter() {
         mMRetrofit = new Retrofit.Builder()
-                .baseUrl(Content.BASE_URL)
+                .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

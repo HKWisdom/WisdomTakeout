@@ -1,7 +1,9 @@
 package com.wisdom.takeout.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,6 +14,7 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.squareup.picasso.Picasso;
 import com.wisdom.takeout.R;
 import com.wisdom.takeout.module.bean.Seller;
+import com.wisdom.takeout.ui.activity.BusinessActivity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -203,16 +206,29 @@ public class HomeAdapter extends RecyclerView.Adapter {
         TextView mTvHomeSendPrice;
         @BindView(R.id.tv_home_distance)
         TextView mTvHomeDistance;
+        public Seller seller;
 
         public SellerViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext,BusinessActivity.class);
+                    intent.putExtra("seller",seller);
+                    mContext.startActivity(intent);
+                }
+            });
         }
 
 
         public void bindView(Seller sellerBean) {
 
+            this.seller = sellerBean;
+
             String iconUrl = sellerBean.getIcon();
+            Log.d("url", "bindView: " + iconUrl);
             Picasso.with(mContext).load(iconUrl).into(mSellerLogo);
             mTvTitle.setText(sellerBean.getName());
             mRatingBar.setRating(Float.parseFloat(sellerBean.getScore()));

@@ -1,5 +1,6 @@
 package com.wisdom.takeout.utils;
 
+import java.util.Map;
 import java.util.Observable;
 
 /**
@@ -27,4 +28,9 @@ public class OrderObservable extends Observable {
 
     public static final String ORDERTYPE_SERVED = "50";
     public static final String ORDERTYPE_CANCELLEDORDER = "60";
+
+    public void newExtraMsg(Map<String, String> orderMap) {
+        setChanged();
+        notifyObservers(orderMap);
+    }
 }
