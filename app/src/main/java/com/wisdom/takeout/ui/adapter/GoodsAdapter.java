@@ -141,7 +141,7 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                     break;
             }
 
-            //TODO:左侧红点处理
+            //左侧红点处理
             processRedDot(isAdd);
 
             //处理购物车的红点
@@ -241,8 +241,11 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
             mTvOldprice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             if (goodsInfo.getCount() > 0) {
                 mTvCount.setVisibility(View.VISIBLE);
+                mIbMinus.setVisibility(View.VISIBLE);
+
             } else {
                 mTvCount.setVisibility(View.GONE);
+                mIbMinus.setVisibility(View.INVISIBLE);
             }
             mTvCount.setText(goodsInfo.getCount() + "");
         }
