@@ -28,6 +28,7 @@ import com.wisdom.takeout.ui.fragment.GoodsInfoFragment;
 import com.wisdom.takeout.ui.fragment.SellerFragment;
 import com.wisdom.takeout.utils.PriceFormater;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,7 +98,12 @@ public class BusinessActivity extends BaseActivity {
             case R.id.ib_back://返回
                 finish();
                 break;
-            case R.id.tvSubmit:
+            case R.id.tvSubmit://跳转到结算页面
+                Intent intent = new Intent(this,ConfirmOrderActivity.class);
+                intent.putExtra("seller",mSeller);
+                GoodsInfoFragment goodsInfoFragment = (GoodsInfoFragment) mFragmentList.get(0);
+                intent.putExtra("shopCar", (Serializable) goodsInfoFragment.mPresenter.getShopCarList());
+                startActivity(intent);
                 break;
             case R.id.bottom://弹出购物车
                 showOrDissmissCart();

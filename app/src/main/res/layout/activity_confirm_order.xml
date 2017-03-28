@@ -69,7 +69,7 @@
                            android:textSize="20sp"
                            android:textColor="#000"
                            android:textStyle="bold"
-                           android:text="黑马程序员"/>
+                           android:text="wisdom"/>
                        <TextView
                            android:id="@+id/tv_sex"
                            android:layout_width="wrap_content"

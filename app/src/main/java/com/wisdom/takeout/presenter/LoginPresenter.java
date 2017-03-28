@@ -9,7 +9,7 @@ import com.j256.ormlite.dao.Dao;
 import com.wisdom.takeout.app.TakeoutApp;
 import com.wisdom.takeout.module.bean.ResponseInfo;
 import com.wisdom.takeout.module.bean.User;
-import com.wisdom.takeout.module.dao.TakeOutHelper;
+import com.wisdom.takeout.module.dao.TakeoutOpenHelper;
 import com.wisdom.takeout.ui.activity.LoginActivity;
 
 import java.sql.SQLException;
@@ -47,7 +47,7 @@ public class LoginPresenter extends BasePresenter {
 
         boolean isLoginOk = false;
         //创建takeout数据库
-        TakeOutHelper takeOutHelper = new TakeOutHelper(mLoginActivity);
+        TakeoutOpenHelper takeOutHelper = new TakeoutOpenHelper(mLoginActivity);
         SQLiteDatabase database = takeOutHelper.getWritableDatabase();
         //获取数据库连接connection以后才能做CRUD
         AndroidDatabaseConnection connection = new AndroidDatabaseConnection(database,true);

@@ -65,7 +65,7 @@ public class UserFragment extends BaseFragment {
             mPhone.setText(TakeoutApp.sUser.getPhone());
         }
         /*try {
-            TakeOutHelper takeOutHelper = new TakeOutHelper(mContext);
+            TakeoutOpenHelper takeOutHelper = new TakeoutOpenHelper(mContext);
             Dao<User, Integer> userDao = takeOutHelper.getDao(User.class);
             User user = userDao.queryBuilder().queryForFirst();
             if (user.getId() == -1) {

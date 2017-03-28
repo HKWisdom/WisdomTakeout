@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import com.wisdom.takeout.R;
 import com.wisdom.takeout.module.bean.RecepitAddress;
+import com.wisdom.takeout.module.dao.AddressDao;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,6 +73,7 @@ public class AddOrEditAddressActivity extends AppCompatActivity {
     @BindView(R.id.bt_ok)
     Button mBtOk;
     private RecepitAddress mAddress;
+    private AddressDao mAddressDao;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,6 +81,7 @@ public class AddOrEditAddressActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_edit_receipt_address);
         ButterKnife.bind(this);
         processIntent();
+        mAddressDao = new AddressDao(this);
         mEtPhone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -172,6 +176,12 @@ public class AddOrEditAddressActivity extends AppCompatActivity {
         builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                boolean isOk = mAddressDao.deleteRecepitAddress(mAddress);
+                if (isOk) {
+                    finish();
+                } else {
+                    Log.e("address", "删除地址异常");
+                }
             }
         });
         builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
@@ -238,6 +248,13 @@ public class AddOrEditAddressActivity extends AppCompatActivity {
         mAddress.setAddress(address);
         mAddress.setDetailAddress(detailAddress);
         mAddress.setLabel(label);
+        boolean isOk = mAddressDao.update(mAddress);
+        if (isOk) {
+            Toast.makeText(this, "更新地址成功", Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            Toast.makeText(this, "更新地址失败!!!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void insertAddress() {
@@ -251,7 +268,14 @@ public class AddOrEditAddressActivity extends AppCompatActivity {
         String address = mEtReceiptAddress.getText().toString().trim();
         String detailAddress = mEtDetailAddress.getText().toString().trim();
         String label = mTvLabel.getText().toString().trim();
-        RecepitAddress recepitAddress = new RecepitAddress(999, name, sex, phone, phoneOther, address, detailAddress, label, "34");
+        RecepitAddress recepitAddress = new RecepitAddress(999, name, sex, phone, phoneOther, address, detailAddress, label, "33");
+        boolean isOk = mAddressDao.addRecepitAddress(recepitAddress);
+        if (isOk) {
+            Toast.makeText(this, "新增地址成功", Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            Toast.makeText(this, "新增地址失败!!!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private String[] mItems = new String[]{"无", "家", "学校", "公司"};
