@@ -72,6 +72,7 @@ public class BusinessActivity extends BaseActivity {
     private View mBottomSheetView;
     private RecyclerView mRvCart;
     private CartRvAdapter mCartRvAdapter;
+    public boolean mHasSelectInfo;
 
     @Override
     protected View initView() {
@@ -196,6 +197,10 @@ public class BusinessActivity extends BaseActivity {
         Intent intent = getIntent();
         if (intent != null) {
             mSeller = (Seller) intent.getSerializableExtra("seller");
+            mHasSelectInfo = intent.getBooleanExtra("hasSelectInfo", false);
+
+            mTvDeliveryFee.setText("配送费" +PriceFormater.format(Float.parseFloat(mSeller.getDeliveryFee())));
+            mTvSendPrice.setText("起送价格" + PriceFormater.format(Float.parseFloat(mSeller.getSendPrice())));
         }
     }
 
@@ -217,6 +222,15 @@ public class BusinessActivity extends BaseActivity {
             mTvSelectNum.setVisibility(View.VISIBLE);
         } else {
             mTvSelectNum.setVisibility(View.GONE);
+        }
+
+        //如果价格超过起送价格，就可以提交订单了
+        if(countPrice >= Float.parseFloat(mSeller.getSendPrice())){
+            mTvSendPrice.setVisibility(View.GONE);
+            mTvSubmit.setVisibility(View.VISIBLE);
+        }else{
+            mTvSendPrice.setVisibility(View.VISIBLE);
+            mTvSubmit.setVisibility(View.GONE);
         }
         mTvSelectNum.setText(count + "");
         mTvCountPrice.setText(PriceFormater.format(countPrice));

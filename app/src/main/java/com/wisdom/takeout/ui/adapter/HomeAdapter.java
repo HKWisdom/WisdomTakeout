@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.squareup.picasso.Picasso;
 import com.wisdom.takeout.R;
+import com.wisdom.takeout.app.TakeoutApp;
 import com.wisdom.takeout.module.bean.Seller;
 import com.wisdom.takeout.ui.activity.BusinessActivity;
 
@@ -217,6 +218,17 @@ public class HomeAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext,BusinessActivity.class);
                     intent.putExtra("seller",seller);
+
+
+                    //查找在整个店点了多少商品
+                    int sellerId = TakeoutApp.sInstance.queryCacheSelectedInfoBySellerId((int) seller.getId());
+                    boolean hasSelectInfo = false;//判断是否有选中的品
+                    if (sellerId > 0)  {
+                        hasSelectInfo = true;
+                    }else {
+                        //不用读缓存
+                    }
+                    intent.putExtra("hasSelectInfo" ,hasSelectInfo);
                     mContext.startActivity(intent);
                 }
             });

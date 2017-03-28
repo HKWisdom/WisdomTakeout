@@ -17,8 +17,11 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.wisdom.takeout.R;
+import com.wisdom.takeout.app.TakeoutApp;
+import com.wisdom.takeout.module.bean.CacheSelectedInfo;
 import com.wisdom.takeout.module.bean.GoodsInfo;
 import com.wisdom.takeout.module.bean.GoodsTypeInfo;
+import com.wisdom.takeout.module.network.Constants;
 import com.wisdom.takeout.ui.activity.BusinessActivity;
 import com.wisdom.takeout.ui.fragment.GoodsInfoFragment;
 import com.wisdom.takeout.utils.PriceFormater;
@@ -56,7 +59,8 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
         GoodsInfo goodsInfo = mGoodsInfoList.get(position); //可乐
         String typeName = goodsInfo.getTypeName(); //饮料
         ((TextView) headerView).setText(typeName);
-        //TODO:typeName为空，typeId为0,需要手动赋值
+
+        //:typeName为空，typeId为0,需要手动赋值
         return headerView;
     }
 
@@ -162,6 +166,7 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
             //得到对应的商品
             GoodsTypeInfo goodsTypeInfo = mGoodsFragment.mAdapter.getInfoList().get(indexByType);
             int redDotCount = goodsTypeInfo.getRedDotCount();
+
             if (isAdd) {
                 redDotCount++;
             }else {
@@ -192,10 +197,14 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                 mTvCount.startAnimation(animationSet);
                 mIbMinus.startAnimation(animationSet);
 
+                //删除缓存
+                TakeoutApp.sInstance.deleteCacheSelectedInfo(mGoodsInfo.getId());
+
             } else {
                 //只改变count值
-
+                TakeoutApp.sInstance.updateCacheSelectedInfo(mGoodsInfo.getId(),Constants.MINUS);
             }
+
             count--;
             mGoodsInfo.setCount(count);
             //4.刷新UI
@@ -215,9 +224,12 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                 mIbMinus.setVisibility(View.VISIBLE);
                 mTvCount.startAnimation(animationSet);
                 mIbMinus.startAnimation(animationSet);
+
+                TakeoutApp.sInstance.addCacheSelectedInfo(new CacheSelectedInfo(mGoodsInfo.getSellerId(),33,mGoodsInfo.getTypeId(),mGoodsInfo.getId(),1));
+
             } else {
                 //只改变count值
-
+                TakeoutApp.sInstance.updateCacheSelectedInfo(mGoodsInfo.getId(), Constants.ADD);
             }
             count++;
             mGoodsInfo.setCount(count);

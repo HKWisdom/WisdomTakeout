@@ -154,11 +154,12 @@
             android:gravity="center"
             android:id="@+id/tvSubmit"
             android:layout_height="match_parent"
-            android:layout_width="90dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:onClick="onClick"
             android:text="去结算"
             android:textColor="#fff"
             android:textSize="18sp"
-            android:visibility="gone" />
+            android:visibility="visible" />
     </LinearLayout>
 </LinearLayout>

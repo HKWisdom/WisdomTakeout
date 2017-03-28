@@ -4,9 +4,11 @@ import android.widget.AbsListView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.wisdom.takeout.app.TakeoutApp;
 import com.wisdom.takeout.module.bean.GoodsInfo;
 import com.wisdom.takeout.module.bean.GoodsTypeInfo;
 import com.wisdom.takeout.module.bean.ResponseInfo;
+import com.wisdom.takeout.ui.activity.BusinessActivity;
 import com.wisdom.takeout.ui.fragment.GoodsInfoFragment;
 
 import org.json.JSONException;
@@ -50,13 +52,28 @@ public class GoodInfoPresenter extends BasePresenter {
 
             mGoodsInfoFragment.mAdapter.setInfoList(mTypeInfoList);
 
-            for (int i = 0; i < mTypeInfoList.size(); i++) {
+            boolean hasSelectInfo = ((BusinessActivity) mGoodsInfoFragment.getActivity()).mHasSelectInfo;
 
+            for (int i = 0; i < mTypeInfoList.size(); i++) {
                 GoodsTypeInfo goodsTypeInfo = mTypeInfoList.get(i);
+                int aTypeCount = 0;
+                if (hasSelectInfo) {//有缓存
+                    //查找一个商品类别的缓存个数
+                     aTypeCount = TakeoutApp.sInstance.queryCacheSelectedInfoByTypeId(goodsTypeInfo.getId());
+                    goodsTypeInfo.setRedDotCount(aTypeCount);
+                }
+
+
                 List<GoodsInfo> goodsInfos = goodsTypeInfo.getList();
 
                 for (int j = 0; j < goodsInfos.size(); j++) {
                     GoodsInfo goodsInfo = goodsInfos.get(j);
+                    //查找具体商品的缓存个数
+                    if (aTypeCount > 0) {
+                        int goodInfoCount = TakeoutApp.sInstance.queryCacheSelectedInfoByGoodsId(goodsInfo.getId());
+                        goodsInfo.setCount(goodInfoCount);
+                    }
+
                     goodsInfo.setTypeId(goodsTypeInfo.getId());
                     goodsInfo.setTypeName(goodsTypeInfo.getName());
                 }
@@ -85,6 +102,9 @@ public class GoodInfoPresenter extends BasePresenter {
                 }
             });
 
+            //拿到缓存数据更新购物车的UI
+            ((BusinessActivity) mGoodsInfoFragment.getActivity()).updateShopCarUi(mGoodsInfosList);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -102,7 +122,6 @@ public class GoodInfoPresenter extends BasePresenter {
     }
 
     public void clearShopCarList() {
-        List<GoodsInfo> shopCarList = new ArrayList<>();
         for (int i = 0; i < mGoodsInfosList.size(); i++) {
             GoodsInfo goodsInfo = mGoodsInfosList.get(i);
             goodsInfo.setCount(0);

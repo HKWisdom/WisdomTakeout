@@ -10,8 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wisdom.takeout.R;
+import com.wisdom.takeout.app.TakeoutApp;
 import com.wisdom.takeout.module.bean.GoodsInfo;
 import com.wisdom.takeout.module.bean.GoodsTypeInfo;
+import com.wisdom.takeout.module.network.Constants;
 import com.wisdom.takeout.ui.activity.BusinessActivity;
 import com.wisdom.takeout.ui.fragment.GoodsInfoFragment;
 import com.wisdom.takeout.utils.PriceFormater;
@@ -118,6 +120,9 @@ public class CartRvAdapter extends RecyclerView.Adapter {
             //4:改变右侧的count
             GoodsInfoFragment goodsInfoFragment = (GoodsInfoFragment) ((BusinessActivity) mContext).mFragmentList.get(0);
             goodsInfoFragment.mGoodsAdapter1.notifyDataSetChanged();
+
+            //只需要更新
+            TakeoutApp.sInstance.updateCacheSelectedInfo(mGoodsInfo.getId(), Constants.ADD);
         }
 
 
@@ -131,6 +136,11 @@ public class CartRvAdapter extends RecyclerView.Adapter {
                 if (mGoodsInfoList.size() == 0) {
                     ((BusinessActivity) mContext).showOrDissmissCart();
                 }
+                //删除缓存
+                TakeoutApp.sInstance.deleteCacheSelectedInfo(mGoodsInfo.getId());
+            }else {
+                //只改变count值
+                TakeoutApp.sInstance.updateCacheSelectedInfo(mGoodsInfo.getId(), Constants.MINUS);
             }
                 notifyDataSetChanged();
 

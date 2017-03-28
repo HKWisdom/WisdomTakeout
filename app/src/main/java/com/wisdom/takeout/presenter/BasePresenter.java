@@ -36,14 +36,19 @@ public abstract class BasePresenter {
         @Override
         public void onResponse(Call<ResponseInfo> call, retrofit2.Response<ResponseInfo> response) {
             ResponseInfo info = response.body();
-            if (info.getCode().equals("0")) {
-                //请求数据成功,解析数据
-                Log.d(TAG, "onResponse: " + response.message());
-                parseJson(info.getData());
-            }else {
-                Log.d(TAG, "onResponse: errorerrorerrorerrorerrorerrorerrorerrorerror");
+            if (info != null) {
+                if (info.getCode().equals("0")) {
+                    //请求数据成功,解析数据
+                    Log.d(TAG, "onResponse: " + response.message());
+                    parseJson(info.getData());
+                }else {
+                    Log.d(TAG, "onResponse: errorerrorerrorerrorerrorerrorerrorerrorerror");
 
+                }
+            }else {
+                Toast.makeText(TakeoutApp.sInstance, "服务器出错", Toast.LENGTH_SHORT).show();
             }
+
         }
 
         @Override

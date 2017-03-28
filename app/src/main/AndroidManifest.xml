@@ -68,11 +68,6 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
         <!--登录的activity-->
@@ -181,6 +176,16 @@
         <activity android:name=".ui.activity.BusinessActivity">
 
         </activity>
+
+        <activity android:name=".ui.activity.RecepitAddressActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ui.activity.AddOrEditAddressActivity"/>
     </application>
 
 </manifest>
