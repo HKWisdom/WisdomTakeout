@@ -56,11 +56,12 @@ dependencies {
     compile 'com.j256.ormlite:ormlite-android:5.0'
     compile files('libs/jpush-android-2.2.0.jar')
     compile files('libs/jpush-android_v3.0.3.jar')
-
     //bottomsheet
     compile 'com.flipboard:bottomsheet-commons:1.5.1'
     compile 'com.flipboard:bottomsheet-core:1.5.1'
-
     //stickylistheaders
     compile 'se.emilsjolander:stickylistheaders:2.7.0'
+    compile files('libs/alipaysdk.jar')
+    compile files('libs/alipaysecsdk.jar')
+    compile files('libs/alipayutdid.jar')
 }

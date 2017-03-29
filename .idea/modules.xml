@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/WisdomTakeout.iml" filepath="$PROJECT_DIR$/WisdomTakeout.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gaodeMap/gaodeMap.iml" filepath="$PROJECT_DIR$/gaodeMap/gaodeMap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gaodedemo/gaodedemo.iml" filepath="$PROJECT_DIR$/gaodedemo/gaodedemo.iml" />
     </modules>
   </component>
 </project>

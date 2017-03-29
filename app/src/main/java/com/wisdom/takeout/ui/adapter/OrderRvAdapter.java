@@ -103,6 +103,13 @@ public class OrderRvAdapter extends RecyclerView.Adapter implements Observer {
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    
+                }
+            });
         }
 
         public void bindView(Order order) {
